@@ -1,0 +1,5 @@
+CorrelationId: c99d58bd-e0a1-48b0-87fd-ed033394631d
+UTC DateTime: 03/08/2024 08:59:03
+
+The following file/folder has not been downloaded
+0. .venv/Lib/site-packages/pip/_vendor/rich/__pycache__
