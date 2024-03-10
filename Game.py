@@ -1,11 +1,11 @@
 from os import path
 import pygame
 import random
-from CEGame import *
+from GameObjects import *
 vec = pygame.math.Vector2
 
 
-class Game:
+class Game():
     # initialize game window and other things for the game.
     def __init__(self):
         pygame.init()
@@ -20,9 +20,8 @@ class Game:
         # self.img_cechar = pygame.image.load('cechar.png').convert_alpha()
 
         self.background = pygame.image.load('background.png').convert()
-        self.background = pygame.transform.scale(self.background, (500, 700))
+        self.background = pygame.transform.scale(self.background, (600, 800))
         self.font = pygame.font.SysFont(None, 25)
-        self.gameExit = False
         self.pos = vec(display_width-100, display_height)
         self.img_cechar.rect.topleft = [self.pos.x, self.pos.y]
         self.vel = vec(0, 0)
@@ -58,6 +57,7 @@ class Game:
         self.platforms.add(p3)
         self.platforms.add(p4)
         self.platforms.add(p5)
+        self.gameExit = False
         self.score = 0
         self.font_name = pygame.font.match_font('freesansbold.ttf')
         self.load_data()
@@ -173,7 +173,7 @@ class Game:
         # self.gameDisplay.blit(self.img_cechar, (self.pos.x, self.pos.y))
         # Displaying the score.
         self.messageToScreen("SCORE : "+(str)(self.score),
-                             25, white, display_width / 2, 15)
+                             25, black, display_width / 2, 15)
         pygame.display.update()
         # pygame.draw.rect(gameDisplay,white,[lead_x,lead_y,block_width,block_height])
         # self.messageToScreen("Welcome to DOODLE JUMP", red, display_width / 2 - 100, display_height - 20)
@@ -192,11 +192,8 @@ class Game:
             self.updateScreen()
             self.clock.tick(fps)
             if self.gameOver == True:
-                self.gameOverScreen()
+                self.gameExit = True
         pygame.mixer.music.fadeout(500)
-
-        pygame.quit()
-        quit()
 
     def checkHorizontalCrossing(self):
         if self.pos.x > display_width:
@@ -261,48 +258,31 @@ class Game:
                     self.vel.y = -12
                     self.jump_sound.play()
 
-    def startScreen(self):
-        background_image = pygame.image.load('background.png').convert()
-        background_image = pygame.transform.scale(background_image, (500, 700))
-        self.gameDisplay.blit(background_image, (0, 0))
-
-        self.messageToScreen("CE JUMP", 40, white,
-                             display_width / 2, display_height / 4)
-        self.messageToScreen("Press any key to continue...",
-                             25, white, display_width / 2, display_height / 2 + 50)
-        self.messageToScreen(
-            "High Score: " + str(self.highscore), 25, white, display_width / 2, 35)
-        pygame.display.update()
-
-        self.waitForKeyPress()
-        g.run()
-
     def gameOverScreen(self):
-        background_image = pygame.image.load('background.png').convert()
-        background_image = pygame.transform.scale(background_image, (500, 700))
-        self.gameDisplay.blit(background_image, (0, 0))
+        self.gameExit = True
+        # background_image = pygame.image.load('background.png').convert()
+        # background_image = pygame.transform.scale(background_image, (600, 800))
+        # self.gameDisplay.blit(background_image, (0, 0))
 
-        self.messageToScreen("GAMEOVER!!", 40, red, display_width / 2, 180)
-        self.messageToScreen("Score : "+(str)(self.score), 40,
-                             black, display_width / 2, display_height / 2-100)
-        self.messageToScreen("Press any key to play again...", 30,
-                             black, display_width / 2 + 50, display_height / 2 + 50)
+        # self.messageToScreen("GAMEOVER!!", 40, red, display_width / 2, 180)
+        # self.messageToScreen("Score : "+(str)(self.score), 40,
+        #                      black, display_width / 2, display_height / 2-100)
+        # self.messageToScreen("Press any key to play again...", 30,
+        #                      black, display_width / 2 + 50, display_height / 2 + 50)
 
-        if self.score > self.highscore:
-            self.highscore = self.score
-            self.messageToScreen("CONGRATULATIONS!!!  NEW HIGH SCORE!",
-                                 30, white, display_width / 2, display_height / 2 - 30)
-            # writing the new highscore in the file
-            with open(path.join(self.dir, hs_file), 'w') as f:
-                f.write(str(self.score))
-        else:
-            self.messageToScreen("High Score: " + str(self.highscore),
-                                 30, white, display_width / 2, display_height / 2 - 30)
+        # if self.score > self.highscore:
+        #     self.highscore = self.score
+        #     self.messageToScreen("CONGRATULATIONS!!!  NEW HIGH SCORE!",
+        #                          30, white, display_width / 2, display_height / 2 - 30)
+        #     # writing the new highscore in the file
+        #     with open(path.join(self.dir, hs_file), 'w') as f:
+        #         f.write(str(self.score))
+        # else:
+        #     self.messageToScreen("High Score: " + str(self.highscore),
+        #                          30, white, display_width / 2, display_height / 2 - 30)
 
-        pygame.display.update()
-        self.waitForKeyPress()
-        g.__init__()
-        g.run()
+        # pygame.display.update()
+        # self.waitForKeyPress()
 
     def waitForKeyPress(self):
         waiting = True
@@ -316,7 +296,3 @@ class Game:
                     waiting = False
                     self.gameOver = False
                     self.gameExit = False
-
-
-g = Game()
-g.startScreen()

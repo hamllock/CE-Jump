@@ -3,6 +3,8 @@ import sys
 import os
 from tkinter import messagebox
 
+from Game import Game
+
 # Initialize Pygame
 pygame.init()
 
@@ -42,8 +44,11 @@ background_frames_count = len(background_frames)
 background_frame_rect = background_frames[0].get_rect()
 
 # Initialize mixer for sound
+dir = os.path.dirname(__file__)
+sound_dir = os.path.join(dir, 'sound')
 pygame.mixer.init()
-pygame.mixer.music.load("power.mp3")  # Load background music
+print(sound_dir)
+pygame.mixer.music.load('power.mp3')  # Load background music
 pygame.mixer.music.set_volume(0.5)  # Set volume (0 to 1)
 pygame.mixer.music.play(-1)  # Play music on loop (-1 means loop indefinitely)
 
@@ -51,8 +56,11 @@ pygame.mixer.music.play(-1)  # Play music on loop (-1 means loop indefinitely)
 music_on = True
 volume = 0.5
 
+g = Game()
 
 # Function to display text on the screen
+
+
 def draw_text(text, font, color, x, y):
     text_surface = font.render(text, True, color)
     text_rect = text_surface.get_rect()
@@ -61,11 +69,15 @@ def draw_text(text, font, color, x, y):
 
 
 # Function to start the game
-def start_game(background_frames, background_index):
-    messagebox.showinfo("Game Started", "CE JUMP game has started!")
-    # Add game logic to start the game
-
+def start_game():
+    g.gameExit = False
+    if not g.gameExit:
+        g.__init__()
+        g.run()
+    return
 # Function to show options
+
+
 def show_options(background_frames, background_index, current_color):
     global music_on, volume
     running = True
@@ -114,18 +126,24 @@ def show_options(background_frames, background_index, current_color):
 
         # Draw music indicator
         music_status = "ON" if music_on else "OFF"
-        draw_text(f"Music Status: {music_status}", pygame.font.Font(font_path, 30), GREEN if music_on else RED, 300, 425)
+        draw_text(f"Music Status: {music_status}", pygame.font.Font(
+            font_path, 30), GREEN if music_on else RED, 300, 425)
 
         # Draw volume level
-        draw_text("Volume: {}%".format(int(volume * 100)), pygame.font.Font(font_path, 35), BLACK, 300, 525)
+        draw_text("Volume: {}%".format(int(volume * 100)),
+                  pygame.font.Font(font_path, 35), BLACK, 300, 525)
 
         # Draw game title
-        draw_text("CE", pygame.font.Font(font_path, 200), current_color, 300, 100)
-        draw_text("JUMP", pygame.font.Font(font_path, 100), current_color, 300, 200)
+        draw_text("CE", pygame.font.Font(
+            font_path, 200), current_color, 300, 100)
+        draw_text("JUMP", pygame.font.Font(
+            font_path, 100), current_color, 300, 200)
 
         pygame.display.flip()
 
 # Function to show how to play
+
+
 def show_how_to_play(background_frames, background_index, current_color):
     how_to_play_text = [
         "",
@@ -184,8 +202,10 @@ def show_how_to_play(background_frames, background_index, current_color):
         draw_text("Back", pygame.font.Font(font_path, 36), WHITE, 300, 725)
 
         # Draw game title
-        draw_text("CE", pygame.font.Font(font_path, 200), current_color, 300, 100)
-        draw_text("JUMP", pygame.font.Font(font_path, 100), current_color, 300, 200)
+        draw_text("CE", pygame.font.Font(
+            font_path, 200), current_color, 300, 100)
+        draw_text("JUMP", pygame.font.Font(
+            font_path, 100), current_color, 300, 200)
 
         pygame.display.flip()
 
@@ -196,11 +216,13 @@ def main_menu(background_frames, background_index):
     current_color_index = 0
     running = True
     last_color_change = 0  # Track the time of the last color change
-    color_interval = 100  # Interval in milliseconds for color change (1 second)
+    # Interval in milliseconds for color change (1 second)
+    color_interval = 100
 
     # Time variables for background animation
     last_frame_update = pygame.time.get_ticks()
-    frame_duration = 200 // background_speed  # Duration for each frame in milliseconds
+    # Duration for each frame in milliseconds
+    frame_duration = 200 // background_speed
 
     while running:
         current_time = pygame.time.get_ticks()
@@ -220,8 +242,10 @@ def main_menu(background_frames, background_index):
         screen.blit(background_frames[background_index], background_frame_rect)
 
         # Draw game title above the start button with dynamic color
-        draw_text("CE", pygame.font.Font(font_path, 200), COLORS[current_color_index], 300, 100)
-        draw_text("JUMP", pygame.font.Font(font_path, 100), COLORS[current_color_index], 300, 200)
+        draw_text("CE", pygame.font.Font(font_path, 200),
+                  COLORS[current_color_index], 300, 100)
+        draw_text("JUMP", pygame.font.Font(font_path, 100),
+                  COLORS[current_color_index], 300, 200)
         # Calculate button positions
         button_x = 200
         start_button_y = 500
@@ -230,12 +254,16 @@ def main_menu(background_frames, background_index):
         button_spacing = 100
 
         # Draw buttons in black color
-        pygame.draw.rect(screen, (0, 0, 0), (button_x, start_button_y, button_width, button_height))
-        draw_text("Start", pygame.font.Font(font_path, 36), WHITE, 300, start_button_y + button_height // 2)
-        pygame.draw.rect(screen, (0, 0, 0), (100, start_button_y + button_spacing, button_width, button_height))
+        pygame.draw.rect(screen, (0, 0, 0), (button_x,
+                         start_button_y, button_width, button_height))
+        draw_text("Start", pygame.font.Font(font_path, 36),
+                  WHITE, 300, start_button_y + button_height // 2)
+        pygame.draw.rect(screen, (0, 0, 0), (100, start_button_y +
+                         button_spacing, button_width, button_height))
         draw_text("Options", pygame.font.Font(font_path, 36), WHITE, 200,
                   start_button_y + button_spacing + button_height // 2)
-        pygame.draw.rect(screen, (0, 0, 0), (310, start_button_y + button_spacing, button_width, button_height))
+        pygame.draw.rect(screen, (0, 0, 0), (310, start_button_y +
+                         button_spacing, button_width, button_height))
         draw_text("How to Play", pygame.font.Font(font_path, 36), WHITE, 410,
                   start_button_y + button_spacing + button_height // 2)
 
@@ -253,14 +281,18 @@ def main_menu(background_frames, background_index):
                 mouse_pos = pygame.mouse.get_pos()
                 if 200 < mouse_pos[0] < 400 and 500 < mouse_pos[1] < 550:
                     print("Start Button Clicked")
-                    start_game(background_frames, background_index)
+                    start_game()
+                    break
                 elif 100 < mouse_pos[0] < 300 and 500 < mouse_pos[1] < 650:
                     print("Options Button Clicked")
-                    show_options(background_frames, background_index, COLORS[current_color_index])
+                    show_options(background_frames, background_index,
+                                 COLORS[current_color_index])
                 elif 310 < mouse_pos[0] < 510 and 500 < mouse_pos[1] < 650:
                     print("How to Play Button Clicked")
-                    show_how_to_play(background_frames, background_index, COLORS[current_color_index])
-                elif 200 < mouse_pos[0] < 400 and 700 < mouse_pos[1] < 750:  # Check if the quit button is clicked
+                    show_how_to_play(
+                        background_frames, background_index, COLORS[current_color_index])
+                # Check if the quit button is clicked
+                elif 200 < mouse_pos[0] < 400 and 700 < mouse_pos[1] < 750:
                     pygame.quit()
                     sys.exit()
 

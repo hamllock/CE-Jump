@@ -12,9 +12,10 @@ green = (0, 200, 0)
 yellow = (255, 255, 0)
 orange = (255, 196, 0)
 spritesheet_file_name = "spritesheet_jumper.png"
-platform_colors = [(0, 0, 0), (200, 0, 0), (255, 255, 255), (0, 200, 0), (255, 255, 0), (255, 196, 0)]
-display_width = 500
-display_height = 700
+platform_colors = [(0, 0, 0), (200, 0, 0), (255, 255, 255),
+                   (0, 200, 0), (255, 255, 0), (255, 196, 0)]
+display_width = 600
+display_height = 800
 fps = 60
 block_width = 50
 block_height = 100
@@ -27,27 +28,33 @@ power_up_boost = -40
 power_up_spawn_freq = 7
 enemies_freq = 5000  # time in ms
 
+
 class SpriteSheet:
     def __init__(self):
-        self.spritesheet = pygame.image.load('spritesheet_jumper.png').convert()
+        self.spritesheet = pygame.image.load(
+            'spritesheet_jumper.png').convert()
 
     def imageLoad(self, x, y, width, height):
         image = pygame.Surface((width, height))
-        image.blit(self.spritesheet, (0,0), (x, y, width, height))
+        image.blit(self.spritesheet, (0, 0), (x, y, width, height))
         image = pygame.transform.scale(image, (width//3, height//3))
         return image
+
 
 class Player(pygame.sprite.Sprite):
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
         self.img_cechar_sprite = pygame.sprite.Sprite()
-        self.img_cechar_sprite.image = pygame.image.load('cechar.png').convert()
+        self.img_cechar_sprite.image = pygame.image.load(
+            'cechar.png').convert()
         self.img_cechar_sprite.rect = self.img_cechar_sprite.image.get_rect()
         self.pos = vec(display_width / 2, display_height - 100)
         self.img_cechar_sprite.rect.topleft = [self.pos.x, self.pos.y]
         self.vel = vec(0, 0)
         self.acc = vec(0, 0)
-        self.mask_image = pygame.mask.from_surface(self.img_cechar_sprite.image)
+        self.mask_image = pygame.mask.from_surface(
+            self.img_cechar_sprite.image)
+
 
 class Platform(pygame.sprite.Sprite):
     def __init__(self, game):
@@ -69,6 +76,7 @@ class Platform(pygame.sprite.Sprite):
                        self.spritesheetsobj.imageLoad(213, 1662, 201, 100)]
         return self.images
 
+
 class lowPlatform(pygame.sprite.Sprite):
     def __init__(self, x, y, w, h):
         pygame.sprite.Sprite.__init__(self)
@@ -78,6 +86,7 @@ class lowPlatform(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect.x = x
         self.rect.y = y
+
 
 class Enemies(pygame.sprite.Sprite):
     def __init__(self, game):
@@ -116,6 +125,7 @@ class Enemies(pygame.sprite.Sprite):
         if self.rect.left > display_width + 100 or self.rect.right < -100:
             self.kill()
 
+
 class PowerUps(pygame.sprite.Sprite):
     def __init__(self, platform, game):
         self.groups = game.powerups
@@ -124,13 +134,13 @@ class PowerUps(pygame.sprite.Sprite):
         self.plat = platform
         self.spritesheetsobj = SpriteSheet()
         self.image = self.spritesheetsobj.imageLoad(563, 1843, 133, 160)
-        self.image.set_colorkey((0,0,0))
+        self.image.set_colorkey((0, 0, 0))
         self.image = pygame.transform.scale(self.image, (133//6, 160//6))
         self.rect = self.image.get_rect()
         self.rect.centerx = self.plat.rect.centerx
         self.rect.bottom = self.plat.rect.top - 5
 
-        print ("Power-UP ADDED!")
+        print("Power-UP ADDED!")
 
     def update(self):
         self.rect.bottom = self.plat.rect.top - 5
