@@ -191,6 +191,10 @@ class Game():
             self.clock.tick(fps)
             if self.gameOver == True:
                 self.gameExit = True
+        if self.score > self.highscore:
+            with open(path.join(self.dir, hs_file), 'w') as f:
+                f.write(str(self.score))
+        return self.score, self.highscore
 
     def checkHorizontalCrossing(self):
         if self.pos.x > display_width:
@@ -257,9 +261,6 @@ class Game():
 
     def gameOverScreen(self):
         self.gameExit = True
-        # background_image = pygame.image.load('background.png').convert()
-        # background_image = pygame.transform.scale(background_image, (600, 800))
-        # self.gameDisplay.blit(background_image, (0, 0))
 
         # self.messageToScreen("GAMEOVER!!", 40, red, display_width / 2, 180)
         # self.messageToScreen("Score : "+(str)(self.score), 40,
@@ -277,9 +278,6 @@ class Game():
         # else:
         #     self.messageToScreen("High Score: " + str(self.highscore),
         #                          30, white, display_width / 2, display_height / 2 - 30)
-
-        # pygame.display.update()
-        # self.waitForKeyPress()
 
     def waitForKeyPress(self):
         waiting = True

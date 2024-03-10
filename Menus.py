@@ -134,12 +134,13 @@ def start_game(background_frames, background_index, current_color):
     g.gameExit = False
     if not g.gameExit:
         g.__init__(character)
-        g.run()
-    return
+        # take the score and highscore for drawing in game_over
+        score, highscore = g.run()
+    return score, highscore
 # Function to show game over screen
 
 
-def game_over(background_frames, background_index, current_color):
+def game_over(background_frames, background_index, current_color, score, highscore):
     running = True
     while running:
         screen.blit(
@@ -155,6 +156,12 @@ def game_over(background_frames, background_index, current_color):
         button_width = 200
         button_height = 50
         button_spacing = 100
+
+        # draw the score
+        draw_text("Score: " + str(score), pygame.font.Font(font_path, 36),
+                  BLACK, 300, 240)
+        draw_text("Highscore: " + str(highscore), pygame.font.Font(font_path, 36),
+                  BLACK, 300, 265)
 
         pygame.draw.rect(screen, (0, 0, 0), (button_x,
                          start_button_y, button_width, button_height))
@@ -179,10 +186,10 @@ def game_over(background_frames, background_index, current_color):
                 if 200 < mouse_pos[0] < 400 and 500 < mouse_pos[1] < 550:
                     print("Start Button Clicked")
                     running = False
-                    start_game(background_frames,
-                               background_index, current_color)
+                    score, highscore = start_game(background_frames,
+                                                  background_index, current_color)
                     game_over(background_frames,
-                              background_index, current_color)
+                              background_index, current_color, score, highscore)
                 elif 200 < mouse_pos[0] < 400 and 500 < mouse_pos[1] < 650:
                     print("Options Button Clicked")
                     show_options(background_frames,
@@ -396,10 +403,10 @@ def main_menu(background_frames, background_index):
                 mouse_pos = pygame.mouse.get_pos()
                 if 200 < mouse_pos[0] < 400 and 500 < mouse_pos[1] < 550:
                     print("Start Button Clicked")
-                    start_game(background_frames, background_index,
-                               COLORS[current_color_index])
+                    score, highscore = start_game(background_frames, background_index,
+                                                  COLORS[current_color_index])
                     game_over(background_frames, background_index,
-                              COLORS[current_color_index])
+                              COLORS[current_color_index], score, highscore)
                     break
                 elif 100 < mouse_pos[0] < 300 and 500 < mouse_pos[1] < 650:
                     print("Options Button Clicked")
