@@ -53,7 +53,6 @@ pygame.mixer.music.play(-1)  # Play music on loop (-1 means loop indefinitely)
 music_on = True
 volume = 0.5
 
-g = Game()
 
 # Function to display text on the screen
 
@@ -66,10 +65,75 @@ def draw_text(text, font, color, x, y):
 
 
 # Function to start the game
-def start_game():
+def start_game(background_frames, background_index, current_color):
+    running = True
+    while running:
+        screen.blit(
+            background_frames[background_index], background_frame_rect)
+
+        draw_text("CHOOSE", pygame.font.Font(
+            font_path, 200), current_color, 300, 100)
+        draw_text("PLAYER", pygame.font.Font(
+            font_path, 100), current_color, 300, 200)
+
+        # Load the images
+        image1 = pygame.image.load('cechar.png')
+        image2 = pygame.image.load('ceboy.png')
+        image4 = pygame.image.load('cegirl.png')
+        image3 = pygame.image.load('ceprof.png')
+
+        # Get the sizes of the images
+        width1, height1 = image1.get_size()
+        width2, height2 = image2.get_size()
+        width3, height3 = image3.get_size()
+        width4, height4 = image4.get_size()
+
+        # Draw the rectangles and images
+        pygame.draw.rect(screen, BLACK, (150, 300, 100, 100))
+        screen.blit(image1, (150 + (100 - width1) //
+                    2, 300 + (100 - height1) // 2))
+
+        pygame.draw.rect(screen, BLACK, (350, 300, 100, 100))
+        screen.blit(image2, (350 + (100 - width2) //
+                    2, 300 + (100 - height2) // 2))
+
+        pygame.draw.rect(screen, BLACK, (350, 500, 100, 100))
+        screen.blit(image3, (350 + (100 - width3) //
+                    2, 500 + (100 - height3) // 2))
+
+        pygame.draw.rect(screen, BLACK, (150, 500, 100, 100))
+        screen.blit(image4, (150 + (100 - width4) //
+                    2, 500 + (100 - height4) // 2))
+
+        pygame.display.flip()
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+            elif event.type == pygame.MOUSEBUTTONDOWN:
+                mouse_pos = pygame.mouse.get_pos()
+                if 50 < mouse_pos[0] < 250 and 250 < mouse_pos[1] < 450:
+                    print("First rectangle clicked")
+                    character = "cechar.png"
+                    running = False
+                elif 350 < mouse_pos[0] < 550 and 250 < mouse_pos[1] < 450:
+                    print("Second rectangle clicked")
+                    character = "ceboy.png"
+                    running = False
+                elif 50 < mouse_pos[0] < 250 and 500 < mouse_pos[1] < 700:
+                    print("Third rectangle clicked")
+                    character = "cegirl.png"
+                    running = False
+                elif 350 < mouse_pos[0] < 550 and 500 < mouse_pos[1] < 700:
+                    print("Fourth rectangle clicked")
+                    character = "ceprof.png"
+                    running = False
+    # gives the Game() the selected character
+    g = Game(character)
+    # Starts the game again
     g.gameExit = False
     if not g.gameExit:
-        g.__init__()
+        g.__init__(character)
         g.run()
     return
 # Function to show game over screen
@@ -115,7 +179,8 @@ def game_over(background_frames, background_index, current_color):
                 if 200 < mouse_pos[0] < 400 and 500 < mouse_pos[1] < 550:
                     print("Start Button Clicked")
                     running = False
-                    start_game()
+                    start_game(background_frames,
+                               background_index, current_color)
                     game_over(background_frames,
                               background_index, current_color)
                 elif 200 < mouse_pos[0] < 400 and 500 < mouse_pos[1] < 650:
@@ -331,7 +396,8 @@ def main_menu(background_frames, background_index):
                 mouse_pos = pygame.mouse.get_pos()
                 if 200 < mouse_pos[0] < 400 and 500 < mouse_pos[1] < 550:
                     print("Start Button Clicked")
-                    start_game()
+                    start_game(background_frames, background_index,
+                               COLORS[current_color_index])
                     game_over(background_frames, background_index,
                               COLORS[current_color_index])
                     break

@@ -7,14 +7,14 @@ vec = pygame.math.Vector2
 
 class Game():
     # initialize game window and other things for the game.
-    def __init__(self):
+    def __init__(self, character):
         pygame.init()
         self.gameDisplay = pygame.display.set_mode(
             (display_width, display_height))
         pygame.display.set_caption("CE Jump!")
         self.clock = pygame.time.Clock()
         self.img_cechar = pygame.sprite.Sprite()
-        self.img_cechar.image = pygame.image.load('cechar.png').convert_alpha()
+        self.img_cechar.image = pygame.image.load(character).convert_alpha()
         self.img_cechar.rect = self.img_cechar.image.get_rect()
 
         # self.img_cechar = pygame.image.load('cechar.png').convert_alpha()
