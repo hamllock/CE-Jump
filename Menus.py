@@ -44,11 +44,8 @@ background_frames_count = len(background_frames)
 background_frame_rect = background_frames[0].get_rect()
 
 # Initialize mixer for sound
-dir = os.path.dirname(__file__)
-sound_dir = os.path.join(dir, 'sound')
 pygame.mixer.init()
-print(sound_dir)
-pygame.mixer.music.load('power.mp3')  # Load background music
+pygame.mixer.music.load("power.mp3")  # Load background music
 pygame.mixer.music.set_volume(0.5)  # Set volume (0 to 1)
 pygame.mixer.music.play(-1)  # Play music on loop (-1 means loop indefinitely)
 
@@ -75,6 +72,59 @@ def start_game():
         g.__init__()
         g.run()
     return
+# Function to show game over screen
+
+
+def game_over(background_frames, background_index, current_color):
+    running = True
+    while running:
+        screen.blit(
+            background_frames[background_index], background_frame_rect)
+
+        draw_text("GAME", pygame.font.Font(
+            font_path, 200), current_color, 300, 100)
+        draw_text("OVER", pygame.font.Font(
+            font_path, 100), current_color, 300, 200)
+
+        button_x = 200
+        start_button_y = 500
+        button_width = 200
+        button_height = 50
+        button_spacing = 100
+
+        pygame.draw.rect(screen, (0, 0, 0), (button_x,
+                         start_button_y, button_width, button_height))
+        draw_text("Try Again", pygame.font.Font(font_path, 36),
+                  WHITE, 300, start_button_y + button_height // 2)
+        pygame.draw.rect(screen, (0, 0, 0), (button_x, start_button_y +
+                         button_spacing, button_width, button_height))
+        draw_text("Options", pygame.font.Font(font_path, 36), WHITE,
+                  300, start_button_y + button_spacing + button_height // 2)
+        pygame.draw.rect(screen, (0, 0, 0), (button_x,
+                         700, button_width, button_height))
+        draw_text("Quit", pygame.font.Font(font_path, 36), WHITE, 300, 725)
+
+        pygame.display.flip()
+
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+            elif event.type == pygame.MOUSEBUTTONDOWN:
+                mouse_pos = pygame.mouse.get_pos()
+                if 200 < mouse_pos[0] < 400 and 500 < mouse_pos[1] < 550:
+                    print("Start Button Clicked")
+                    running = False
+                    start_game()
+                    game_over(background_frames,
+                              background_index, current_color)
+                elif 200 < mouse_pos[0] < 400 and 500 < mouse_pos[1] < 650:
+                    print("Options Button Clicked")
+                    show_options(background_frames,
+                                 background_index, current_color)
+                elif 200 < mouse_pos[0] < 400 and 700 < mouse_pos[1] < 750:
+                    running = False
+
 # Function to show options
 
 
@@ -282,6 +332,8 @@ def main_menu(background_frames, background_index):
                 if 200 < mouse_pos[0] < 400 and 500 < mouse_pos[1] < 550:
                     print("Start Button Clicked")
                     start_game()
+                    game_over(background_frames, background_index,
+                              COLORS[current_color_index])
                     break
                 elif 100 < mouse_pos[0] < 300 and 500 < mouse_pos[1] < 650:
                     print("Options Button Clicked")

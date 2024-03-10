@@ -74,8 +74,6 @@ class Game():
                 self.highscore = 0
 
         self.sound_dir = path.join(self.dir, 'sound')
-        pygame.mixer.music.load(
-            path.join(self.sound_dir, 'background_music.ogg'))
         self.jump_sound = pygame.mixer.Sound(
             path.join(self.sound_dir, 'jump.ogg'))
         self.jump_sound.set_volume(0.1)
@@ -193,7 +191,6 @@ class Game():
             self.clock.tick(fps)
             if self.gameOver == True:
                 self.gameExit = True
-        pygame.mixer.music.fadeout(500)
 
     def checkHorizontalCrossing(self):
         if self.pos.x > display_width:
